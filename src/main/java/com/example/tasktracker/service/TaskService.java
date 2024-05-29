@@ -6,6 +6,7 @@ import com.example.tasktracker.entity.User;
 import com.example.tasktracker.exception.EntityNotFoundException;
 import com.example.tasktracker.repository.TaskRepository;
 import com.example.tasktracker.repository.UserRepository;
+import com.example.tasktracker.security.PrincipalUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -119,7 +120,7 @@ public class TaskService {
     }
 
     private Mono<? extends Task>  tasks(Task initialTask){
-        Mono<User> authorMono = userRepository.findById(initialTask.getAuthorId())
+        Mono<User> authorMono = userRepository.findById(PrincipalUtils.getUserId())
                 .switchIfEmpty(Mono.error(new EntityNotFoundException(MessageFormat.format("Пользователь с ID: {0} не найден", initialTask.getAuthorId()))));
         Mono<User> assigneeMono = userRepository.findById(initialTask.getAssigneeId())
                 .switchIfEmpty(Mono.error(new EntityNotFoundException(MessageFormat.format("Пользователь с ID: {0} не найден", initialTask.getAssigneeId()))));

@@ -30,6 +30,10 @@ public class UserService {
                 .switchIfEmpty(Mono.error(new EntityNotFoundException(MessageFormat.format("Пользователь с ID: {0} не найден", id))));
     }
 
+    public Mono<User> findByUserName(String name){
+        return userRepository.findByUserName(name);
+    }
+
     public Mono<User> saveUser(User user){
         user.setId(UUID.randomUUID().toString());
         return userRepository.save(user);
